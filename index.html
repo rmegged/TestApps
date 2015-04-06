@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Two Forms with Ajax</title>
+</head>
+<body>
+
+    <div id="Details">
+        <img src="\Images\cruise1.jpg" alt="Cruise">
+        <p>Please Fill Your Details</p>
+        <br />
+        <form>
+            Full Name:<br />
+            <input type="text" name="fullName" />
+            <br />
+            Phone Number:<br />
+            <input type="tel" name="phoneNumber" />
+            <br />
+            Email:<br />
+            <input type="email" name="email" />
+            <br /><br />
+            <button type="button" onclick="sendDetails(fullName.value, phoneNumber.value, email.value)">Submit!</button>
+        </form>
+        <br/>
+        <p id="ThanksMessage"></p>
+        <br /><br />
+        <button type="button" onclick="toggleForm('Destination','Details')">Select Destination</button>
+    </div>
+
+    <div id="Destination">
+        <img src="\Images\cruise2.jpg" alt="Cruise">
+        <p>Please Select Required Destination</p>
+        <form>
+            <input type="radio" name="destination" value="Caribeans" checked>The Caribeans
+            <br>
+            <input type="radio" name="destination" value="Mediterranean Sea">Mediterranean Sea
+            <br>
+            <input type="radio" name="destination" value="Classic Europe">Classic Europe
+            <br>
+            <input type="radio" name="destination" value="North America">North America
+            <br>
+            <input type="radio" name="destination" value="Safari">Safari
+            <br /><br />
+            <button type="button" onclick="sendDestination(destination.value)">Submit!</button>
+        </form>
+        <br />
+        <p id="DestinationSelected"></p>
+        <br /><br />
+        <button type="button" onclick="toggleForm('Details', 'Destination')">Back to Details!</button>
+
+    </div>
+    <script>
+        document.getElementById('Destination').style.display = 'none';
+        function toggleForm(showForm, hideForm) {
+            document.getElementById(showForm).style.display = 'block';
+            document.getElementById(hideForm).style.display = 'none';
+        }
+        function sendDetails(fullName, phoneNumber, email) {
+            var xmlhttp;
+            var stringToSend;
+
+            alert("Thanks: " + fullName + ", " + phoneNumber + ", " + email);
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("ThanksMessage").innerHTML = xmlhttp.responseText;
+                }
+            }
+            //xmlhttp.open("GET", "rmegged.byethost3.com/Aternity/AjaxFiles/DetailsFile.txt", true);
+            //xmlhttp.open("GET", "AjaxFile/DetailsFile.txt", true);
+            //xmlhttp.send();
+            xmlhttp.open("POST", "AjaxFiles/DetailsFile.txt", true);
+            xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            stringToSend = "fullname=" + fullName + "&phonenumber=" + phoneNumber + "&email=" + email;
+            alert(stringToSend);
+            xmlhttp.send(stringToSend);
+        }
+        function sendDestination(destination) {
+            var xmlhttp;
+
+            alert("Thanks for Selecting" + destination);
+            if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+                xmlhttp = new XMLHttpRequest();
+            }
+            else {// code for IE6, IE5
+                xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            xmlhttp.onreadystatechange = function () {
+                if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                    document.getElementById("DestinationSelected").innerHTML = xmlhttp.responseText;
+                }
+            }
+            xmlhttp.withCredentials = true;
+            //xmlhttp.open("GET", "http://rmegged.byethost3.com/Aternity/AjaxFiles/DetailsFile.txt", true);
+            xmlhttp.open("GET", "AjaxFiles/DestinationFile.txt", true);
+            xmlhttp.send();
+        }
+    </script>
+
+</body>
+</html>
